@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchNewsFromGuardian } from "../api/newsApiClient";
+import { fetchNewsFromGuardian } from "../api/newsServiceImpl";
 import { handleApiError } from "../utils/errorHandler";
 
 // Thunk for fetching articles from Guardian API
@@ -8,7 +8,7 @@ export const searchGuardianNews = createAsyncThunk(
   async (query, { rejectWithValue }) => {
     try {
       const data = await fetchNewsFromGuardian(query);
-      return data.response.results; // Ensure this matches the API response structure
+      return data.response.results;
     } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
@@ -29,7 +29,7 @@ const guardianSearchSlice = createSlice({
       })
       .addCase(searchGuardianNews.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.news = action.payload; // Ensure this is the correct state key
+        state.news = action.payload;
       })
       .addCase(searchGuardianNews.rejected, (state, action) => {
         state.status = "failed";

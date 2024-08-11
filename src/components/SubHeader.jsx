@@ -30,9 +30,9 @@ const SubHeader = ({ hideOnDrawerOpen }) => {
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            overflowX: "auto", // Enable horizontal scrolling
+            overflowX: "auto",
             width: "100%",
-            justifyContent: isMobile ? "center" : "flex-start", // Center or align items based on screen size
+            justifyContent: isMobile ? "center" : "flex-start", 
           }}
         >
           {CATEGORIES.map((cat) => (
@@ -41,8 +41,8 @@ const SubHeader = ({ hideOnDrawerOpen }) => {
               onClick={() => handleCategoryClick(cat.id)}
               sx={{
                 margin: 1,
-                minWidth: "120px", // Ensure buttons have a minimum width
-                textAlign: "center", // Center text inside buttons
+                minWidth: "120px", 
+                textAlign: "center",
               }}
             >
               {cat.name}

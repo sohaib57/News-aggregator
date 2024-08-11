@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Header from '../Header';
-import SubHeader from '../SubHeader';
-import MobileDrawer from '../MobileDrawer';
-import { Outlet } from 'react-router-dom';
-import { Box } from '@mui/material';
+import React, { useState } from "react";
+import Header from "../Header";
+import SubHeader from "../SubHeader";
+import MobileDrawer from "../MobileDrawer";
+import { Outlet } from "react-router-dom";
+import { Box } from "@mui/material";
 
 const Layout = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);

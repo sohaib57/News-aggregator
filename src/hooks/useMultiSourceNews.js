@@ -4,17 +4,21 @@ import { getTopHeadlines } from "../features/topHeadlinesSlice"; // For Top Head
 import { searchGuardianNews } from "../features/guardianSearchSlice"; // For Guardian API
 import { useEffect } from "react";
 
-const useMultiSourceNews  = (query, isSearch = false, apiSource = "everything") => {
+const useMultiSourceNews = (
+  query,
+  isSearch = false,
+  apiSource = "everything"
+) => {
   const dispatch = useDispatch();
 
   const selectArticlesState = (state) => {
     switch (apiSource) {
       case "everything":
-        return state.news; // Ensure this matches your newsSlice state key
+        return state.news;
       case "topHeadlines":
         return state.topHeadlines;
       case "guardian":
-        return state.guardianSearch; // Ensure this matches your guardianSearchSlice state key
+        return state.guardianSearch;
       default:
         return state.news;
     }

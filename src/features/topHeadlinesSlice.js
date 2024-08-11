@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchTopHeadlines } from '../api/newsApiClient';
+import { fetchTopHeadlines } from '../api/newsServiceImpl';
 
 // Thunk for fetching top headlines
 export const getTopHeadlines = createAsyncThunk(
@@ -17,7 +17,7 @@ export const getTopHeadlines = createAsyncThunk(
 const topHeadlinesSlice = createSlice({
   name: 'topHeadlines',
   initialState: {
-    news: [],  // Updated to 'news'
+    news: [],
     filters: {
       query: '',
       category: '',
@@ -38,7 +38,7 @@ const topHeadlinesSlice = createSlice({
     setQuery(state, action) {
       state.filters.query = action.payload;
     },
-    clearNews(state) { // Updated to 'clearNews'
+    clearNews(state) {
       state.news = [];
     },
   },
@@ -49,9 +49,9 @@ const topHeadlinesSlice = createSlice({
       })
       .addCase(getTopHeadlines.fulfilled, (state, action) => {
         if (action.payload.page === 1) {
-          state.news = action.payload.articles; // Updated to 'news'
+          state.news = action.payload.articles;
         } else {
-          state.news = [...state.news, ...action.payload.articles]; // Updated to 'news'
+          state.news = [...state.news, ...action.payload.articles];
         }
         state.filters.category = action.payload.category;
         state.filters.page = action.payload.page;

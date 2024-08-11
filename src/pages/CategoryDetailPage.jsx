@@ -3,17 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getTopHeadlines, clearNews } from "../features/topHeadlinesSlice";
 import NewsList from "../components/NewsList";
-import { CircularProgress, Typography, Container, Box } from "@mui/material";
+import { Typography, Container, Box } from "@mui/material";
 import { CATEGORIES } from "../constants/constants";
+import LoadingIndicator from "../components/LoadingIndicator";
 
-const CategoryPage = () => {
+const CategoryDetailPage = () => {
   const { categoryId } = useParams();
   const dispatch = useDispatch();
   const { news, paginationStatus, error } = useSelector(
     (state) => state.topHeadlines
   );
 
-  // Find the category name based on the categoryId
   const category =
     CATEGORIES.find((cat) => cat.id === categoryId)?.name || "Unknown Category";
 
@@ -21,7 +21,7 @@ const CategoryPage = () => {
     dispatch(clearNews());
     dispatch(
       getTopHeadlines({
-        query: "", // Empty query for category page
+        query: "",
         category: categoryId,
         page: 1,
         pageSize: 50,
@@ -32,11 +32,13 @@ const CategoryPage = () => {
   return (
     <Container>
       <Box sx={{ textAlign: "center", marginBottom: 4 }}>
-        <Typography variant="h3" component="h1">
+        <Typography variant="h3" component="h1" sx={{ marginTop: 8 }}>
           {category}
         </Typography>
       </Box>
-      {paginationStatus === "loading" && <CircularProgress />}
+      {paginationStatus === "loading" && (
+        <LoadingIndicator status={paginationStatus} error={error} />
+      )}
       {paginationStatus === "failed" && (
         <Typography variant="h6" color="error">
           Oops! Something went wrong. Please try again later.
@@ -49,4 +51,4 @@ const CategoryPage = () => {
   );
 };
 
-export default CategoryPage;
+export default CategoryDetailPage;

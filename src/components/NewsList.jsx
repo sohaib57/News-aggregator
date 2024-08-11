@@ -1,8 +1,8 @@
 import React from "react";
-import NewsCard from "./NewsCard"; // Update import to NewsCard
+import NewsCard from "./NewsCard";
 import { Box, Typography } from "@mui/material";
 
-const NewsList = ({ news }) => { // Update prop name to news
+const NewsList = ({ news }) => { 
   if (!news) {
     return <Typography variant="body1">No results found</Typography>;
   }
@@ -16,12 +16,12 @@ const NewsList = ({ news }) => { // Update prop name to news
         p: 2,
       }}
     >
-      {news.length === 0 ? ( // Update to use news
+      {news.length === 0 ? ( 
         <Typography variant="body1">No results found</Typography>
       ) : (
-        news.map((item) => ( // Rename article to item
+        news.map((item) => (
           <NewsCard
-            key={item.id || item.url} // Ensure unique key
+            key={item.id || item.url} 
             news={{
               title: item.webTitle || item.title,
               description: item.pillarName || item.description,

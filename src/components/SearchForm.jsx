@@ -9,8 +9,8 @@ const SearchForm = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 1, // Space between the text field and button
-        maxWidth: 400, // Optional: to limit the width of the form
+        gap: 1,
+        maxWidth: 400,
       }}
     >
       <TextField
@@ -19,13 +19,13 @@ const SearchForm = ({ searchQuery, onSearchChange, onSearchSubmit }) => {
         placeholder="Search news, topics and more"
         value={searchQuery}
         onChange={onSearchChange}
-        fullWidth // Ensures the text field takes available width
+        fullWidth 
       />
       <Button
         type="submit"
         variant="contained"
         color="primary"
-        disabled={!searchQuery.trim()} // Disable if the input field is empty
+        disabled={!searchQuery.trim()}
       >
         Search
       </Button>

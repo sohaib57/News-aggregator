@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchNews } from '../api/newsApiClient';
+import { fetchNews } from '../api/newsServiceImpl';
 
 // Thunk for fetching news
 export const getNews = createAsyncThunk(
@@ -7,7 +7,7 @@ export const getNews = createAsyncThunk(
   async ({ query, filters }, { rejectWithValue }) => {
     try {
       const data = await fetchNews(query, filters);
-      return data.articles; // Ensure this matches the API response
+      return data.articles; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
