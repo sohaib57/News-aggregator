@@ -1,24 +1,25 @@
-// src/components/Header.js
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFilters, getTopHeadlines } from '../features/articlesSlice';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setFilters } from "../features/articlesSlice";
 import {
   AppBar,
   Toolbar,
   Typography,
   IconButton,
   useTheme,
-  useMediaQuery
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchForm from './SearchForm'; // Import the new component
+  useMediaQuery,
+  Box,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchForm from "./SearchForm";
 
-const Header = ({ onDrawerToggle }) => {
+const Header = ({ onDrawerToggle, drawerOpen }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const activeCategory = useSelector((state) => state.articles.filters.category);
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -26,31 +27,58 @@ const Header = ({ onDrawerToggle }) => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    dispatch(setFilters({
-      query: searchQuery,
-      dateRange: {},
-      source: '',
-      category: activeCategory,
-    }));
-    dispatch(getTopHeadlines({ query: searchQuery, category: activeCategory }));
+    dispatch(
+      setFilters({
+        query: searchQuery,
+        dateRange: {},
+        source: "",
+        category: "",
+      })
+    );
+    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+  };
+
+  const handleLogoClick = () => {
+    navigate("/"); // Navigate to the home page
   };
 
   return (
     <AppBar position="static">
       <Toolbar>
         {isMobile && (
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={onDrawerToggle}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={onDrawerToggle}
+          >
             <MenuIcon />
           </IconButton>
         )}
-        <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Innoscripta News
-        </Typography>
-        <SearchForm
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          onSearchSubmit={handleSearchSubmit}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            flexGrow: 1,
+            justifyContent: isMobile ? "center" : "flex-start", // Adjust alignment based on screen size
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              cursor: "pointer",
+            }}
+            onClick={handleLogoClick} // Click handler for navigation
+          >
+            Innoscripta News
+          </Typography>
+        </Box>
+        {!drawerOpen && !isMobile && (
+          <SearchForm
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            onSearchSubmit={handleSearchSubmit}
+          />
+        )}
       </Toolbar>
     </AppBar>
   );

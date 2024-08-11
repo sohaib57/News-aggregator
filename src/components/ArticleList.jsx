@@ -1,23 +1,31 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import ArticleCard from './ArticleCard';
+import React from "react";
+import { useSelector } from "react-redux";
+import ArticleCard from "./ArticleCard";
+import { Box, Typography } from "@mui/material";
 
-const ArticleList = () => {
-  const { articles, status } = useSelector((state) => state.articles);
+const ArticleList = ({ articles }) => {
+  const { status } = useSelector((state) => state.articles);
 
-  if (status === 'loading') return <p>Loading...</p>;
-  if (status === 'failed') return <p>Error loading articles</p>;
+  if (status === "loading") return <Typography variant="body1">Loading...</Typography>;
+  if (status === "failed") return <Typography variant="body1" color="error">Error loading articles</Typography>;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '20px' }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2, 
+        p: 2
+      }}
+    >
       {articles.length === 0 ? (
-        <p>No articles found</p>
+        <Typography variant="body1">No results found</Typography>
       ) : (
         articles.map((article) => (
           <ArticleCard key={article.url} article={article} />
         ))
       )}
-    </div>
+    </Box>
   );
 };
 

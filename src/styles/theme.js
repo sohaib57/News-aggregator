@@ -4,18 +4,37 @@ const theme = createTheme({
   typography: {
     fontFamily: 'Arial, sans-serif',
   },
+  palette: {
+    primary: {
+      main: '#1976d2',
+    },
+    secondary: {
+      main: '#dc004e',
+    },
+  },
   components: {
-    MuiCard: {
+    MuiAppBar: {
       styleOverrides: {
         root: {
-          marginBottom: '20px',
+          backgroundColor: '#f5f5f5',
+          color: '#000',
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          marginTop: '10px',
+          borderRadius: '4px',
+          textTransform: 'none',
+          fontSize: '0.875rem',
+        },
+        contained: {
+          backgroundColor: '#1976d2',
+          color: '#fff',
+          '&:disabled': {
+            backgroundColor: '#e0e0e0',
+            color: '#9e9e9e',
+          },
         },
       },
     },

@@ -1,28 +1,19 @@
-// src/hooks/useArticles.js
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getArticles } from '../features/articlesSlice';
+import { getArticles, clearArticles } from '../features/articlesSlice'; // Import clearArticles action
 
-const useArticles = (query) => {
+const useArticles = (query, isSearch = false) => { // Added isSearch flag
   const dispatch = useDispatch();
   const { articles, status, error, filters } = useSelector((state) => state.articles);
 
-  const [page, setPage] = useState(filters.page);
-
   useEffect(() => {
-    // Dispatch initial fetch if necessary
-    if (filters.page === 1) {
-      dispatch(getArticles({ query, filters }));
+    if (isSearch) {
+      dispatch(clearArticles()); // Clear articles when performing a search
     }
-  }, [dispatch, query, filters]);
+    dispatch(getArticles({ query, filters, isSearch }));
+  }, [dispatch, query, filters, isSearch]);
 
-  const loadMore = () => {
-    const newPage = page + 1;
-    setPage(newPage);
-    dispatch(getArticles({ query, filters: { ...filters, page: newPage } }));
-  };
-
-  return { articles, status, error, loadMore };
+  return { articles, status, error };
 };
 
 export default useArticles;

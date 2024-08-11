@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import articlesReducer from './features/articlesSlice';
-import userPreferencesReducer from './features/userPreferencesSlice';
+import articlesReducer from "./features/articlesSlice";
+import topHeadlinesReducer from "./features/topHeadlinesSlice";
 
 const store = configureStore({
   reducer: {
     articles: articlesReducer,
-    userPreferences: userPreferencesReducer,
+    topHeadlines: topHeadlinesReducer,
   },
 });
 

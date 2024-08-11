@@ -1,10 +1,9 @@
-// src/components/Layout.jsx
 import React, { useState } from 'react';
-import Header from './Header';
-import SubHeader from './SubHeader';
-import MobileDrawer from './MobileDrawer';
-import { Container } from '@mui/material';
+import Header from '../Header';
+import SubHeader from '../SubHeader';
+import MobileDrawer from '../MobileDrawer';
 import { Outlet } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 const Layout = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -14,12 +13,12 @@ const Layout = () => {
   };
 
   return (
-    <Container>
-      <Header onDrawerToggle={handleDrawerToggle} />
+    <Box>
+      <Header onDrawerToggle={handleDrawerToggle} drawerOpen={drawerOpen} />
       <MobileDrawer open={drawerOpen} onClose={handleDrawerToggle} />
-      <SubHeader />
+      <SubHeader hideOnDrawerOpen={drawerOpen} />
       <Outlet /> {/* This will render the nested routes */}
-    </Container>
+    </Box>
   );
 };
 

@@ -27,12 +27,13 @@ export const fetchArticles = (query, filters) =>
     pageSize: filters.pageSize,
   });
 
-export const fetchTopHeadlines = (query, category, page = 1, pageSize = 50) =>
-  fetchData("top-headlines", {
-    q: query,
-    category: category,
-    page,
-    pageSize,
-  });
+  export const fetchTopHeadlines = (query, category, page = 1, pageSize = 50) =>
+    fetchData("top-headlines", {
+      q: query,
+      category: category, // Ensure this is correctly passed
+      page,
+      pageSize,
+    });
+  
 
 export const fetchSources = () => fetchData("top-headlines/sources", {});
