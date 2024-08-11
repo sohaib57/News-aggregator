@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import NewsList from '../components/NewsList';
-import LoadingIndicator from '../components/LoadingIndicator';
+import NewsList from '../components/NewsList/NewsList';
+import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Container, Typography, Box, Button, Stack } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
-import { fetchNewsFromGuardian } from '../api/newsServiceImpl'; // Import the fetch function
+import { Container, Typography, Box } from '@mui/material';
+import Pagination from '../components/Pagination/Pagination'; 
+import { fetchNewsFromGuardian } from '../api/newsServiceImpl';
 
 const SearchResultsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery('(max-width:600px)');
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get('query') || '';
   const currentPage = parseInt(queryParams.get('page'), 10) || 1;
 
-  // State for news data, loading, and error
   const [news, setNews] = useState([]);
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
@@ -27,7 +25,7 @@ const SearchResultsPage = () => {
       try {
         const data = await fetchNewsFromGuardian(searchQuery, { page: currentPage });
         setNews(data.response.results);
-        setTotalPages(Math.ceil(data.response.total / 10)); // Assuming pageSize is 10
+        setTotalPages(Math.ceil(data.response.total / 10));
         setTotalResults(data.response.total);
         setStatus('succeeded');
       } catch (error) {
@@ -41,56 +39,6 @@ const SearchResultsPage = () => {
 
   const handlePageChange = (newPage) => {
     navigate(`?query=${searchQuery}&page=${newPage}`);
-  };
-
-  const renderPagination = () => {
-    const maxButtons = 2; // Number of buttons to show on either side of the current page
-    const buttons = [];
-    const halfMax = Math.floor(maxButtons / 2);
-
-    let startPage = Math.max(currentPage - halfMax, 1);
-    let endPage = Math.min(currentPage + halfMax, totalPages);
-
-    // Adjust start and end page if not enough buttons on one side
-    if (endPage - startPage + 1 < maxButtons) {
-      if (endPage === totalPages) {
-        startPage = Math.max(totalPages - maxButtons + 1, 1);
-      } else {
-        endPage = Math.min(startPage + maxButtons - 1, totalPages);
-      }
-    }
-
-    if (startPage > 1) {
-      buttons.push(1);
-      if (startPage > 2) buttons.push('...');
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(i);
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) buttons.push('...');
-      buttons.push(totalPages);
-    }
-
-    return buttons.map((pageNum, index) =>
-      pageNum === '...' ? (
-        <Typography key={index} variant="body1" sx={{ mx: 1 }}>
-          ...
-        </Typography>
-      ) : (
-        <Button
-          key={pageNum}
-          variant="outlined"
-          onClick={() => handlePageChange(pageNum)}
-          sx={{ mx: 0.5 }}
-          disabled={pageNum === currentPage}
-        >
-          {pageNum}
-        </Button>
-      )
-    );
   };
 
   return (
@@ -111,53 +59,11 @@ const SearchResultsPage = () => {
             </Typography>
           </Box>
           <NewsList news={news} />
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-            sx={{ marginTop: 2 }}
-          >
-            {!isMobile && (
-              <>
-                <Button
-                  variant="outlined"
-                  disabled={currentPage <= 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  Previous
-                </Button>
-                {renderPagination()}
-                <Button
-                  variant="outlined"
-                  disabled={currentPage >= totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  Next
-                </Button>
-              </>
-            )}
-            {isMobile && (
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Button
-                  variant="outlined"
-                  disabled={currentPage <= 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  Previous
-                </Button>
-                <Typography variant="body2" sx={{ mx: 2 }}>
-                  Page {currentPage} of {totalPages}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  disabled={currentPage >= totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  Next
-                </Button>
-              </Box>
-            )}
-          </Stack>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </>
       )}
       {status === 'failed' && (

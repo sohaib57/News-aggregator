@@ -1,12 +1,12 @@
 import React from 'react';
 import { Card, CardContent, Typography, CardMedia, Link } from '@mui/material';
-import { getImage } from '../utils/imageUtils';
+import { getImage } from '../../utils/imageUtils';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
 const NewsCard = ({ news }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md')); // Check if screen size is medium or smaller
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const imageSrc = getImage(news.image);
 
   return (

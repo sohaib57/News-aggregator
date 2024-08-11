@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   Box,
 } from "@mui/material";
-import { CATEGORIES } from "../constants/constants";
+import { CATEGORIES } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 
 const SubHeader = ({ hideOnDrawerOpen }) => {

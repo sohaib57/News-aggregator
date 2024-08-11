@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getTopHeadlines, clearNews } from "../features/topHeadlinesSlice";
-import NewsList from "../components/NewsList";
+import NewsList from "../components/NewsList/NewsList";
 import { Typography, Container, Box } from "@mui/material";
 import { CATEGORIES } from "../constants/constants";
-import LoadingIndicator from "../components/LoadingIndicator";
+import LoadingIndicator from "../components/LoadingIndicator/LoadingIndicator";
 
 const CategoryDetailPage = () => {
   const { categoryId } = useParams();

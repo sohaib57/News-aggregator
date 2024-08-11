@@ -58,9 +58,9 @@ const newsSlice = createSlice({
       })
       .addCase(getNews.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.news = action.payload.articles; // Update with articles
-        state.totalPages = action.payload.totalPages; // Set total pages
-        state.totalResults = action.payload.totalResults; // Set total results
+        state.news = action.payload.articles; 
+        state.totalPages = action.payload.totalPages; 
+        state.totalResults = action.payload.totalResults; 
       })
       .addCase(getNews.rejected, (state, action) => {
         state.status = "failed";

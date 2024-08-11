@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import Header from "../Header";
-import SubHeader from "../SubHeader";
-import MobileDrawer from "../MobileDrawer";
+import Header from "../Header/Header";
+import SubHeader from "../Header/SubHeader";
+import MobileDrawer from "../Drawer/MobileDrawer";
 import { Outlet } from "react-router-dom";
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 
 const Layout = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Small screens and down
-  const isTabletOrLarger = useMediaQuery(theme.breakpoints.up('md')); // Medium screens and up
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTabletOrLarger = useMediaQuery(theme.breakpoints.up('md'));
 
   const handleDrawerToggle = () => {
     setDrawerOpen((prev) => !prev);

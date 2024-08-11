@@ -10,7 +10,7 @@ export const searchGuardianNews = createAsyncThunk(
       const data = await fetchNewsFromGuardian(query, { page, pageSize });
       return {
         results: data.response.results,
-        totalPages: data.response.pages // Ensure this matches the API response
+        totalPages: data.response.pages
       };
     } catch (error) {
       return rejectWithValue(handleApiError(error));

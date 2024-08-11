@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, IconButton, useTheme, useMediaQuery, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchForm from './SearchForm';
-import { setFilters } from '../features/newsSlice'; 
+import SearchForm from '../SearchForm/SearchForm';
+import { setFilters } from '../../features/newsSlice'; 
 
 const Header = ({ onDrawerToggle, drawerOpen }) => {
   const dispatch = useDispatch();

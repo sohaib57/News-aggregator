@@ -1,10 +1,10 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemText, Box, useTheme, useMediaQuery } from '@mui/material';
-import { CATEGORIES } from '../constants/constants';
+import { CATEGORIES } from '../../constants/constants';
 import { useDispatch } from 'react-redux';
-import { setFilters } from '../features/newsSlice'; // Update to newsSlice
+import { setFilters } from '../../features/newsSlice'; 
 import { useNavigate } from 'react-router-dom';
-import SearchForm from './SearchForm';
+import SearchForm from '../SearchForm/SearchForm';
 
 const MobileDrawer = ({ open, onClose }) => {
   const dispatch = useDispatch();

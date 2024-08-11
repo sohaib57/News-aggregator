@@ -26,7 +26,7 @@ const NewsList = ({ news }) => {
         flexDirection: "column",
         gap: 2,
         p: 2,
-        alignItems: "center", // Centers items horizontally
+        alignItems: "center", 
       }}
     >
       {news.length === 0 ? (

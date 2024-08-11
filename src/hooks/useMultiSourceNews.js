@@ -1,8 +1,8 @@
 // hooks/useMultiSourceNews.js
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getNews } from '../features/newsSlice'; // For Everything API
-import { getTopHeadlines } from '../features/topHeadlinesSlice'; // For Top Headlines API
+import { getNews } from '../features/newsSlice'; 
+import { getTopHeadlines } from '../features/topHeadlinesSlice'; 
 
 const useMultiSourceNews = (query, page, apiSource = 'everything') => {
   const dispatch = useDispatch();
