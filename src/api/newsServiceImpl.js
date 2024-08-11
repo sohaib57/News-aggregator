@@ -23,4 +23,7 @@ const fetchData = async (baseUrl, apiKey, endpoint, params) => {
 export const fetchNews = async (query, filters) => fetchData(NEWS_API_KEY_BASE_URL, NEWS_API_KEY, 'everything', { q: query, ...filters });
 export const fetchTopHeadlines = async (query, category, page = 1, pageSize = 50) => fetchData(NEWS_API_KEY_BASE_URL, NEWS_API_KEY, 'top-headlines', { q: query, category, page, pageSize });
 export const fetchSources = async () => fetchData(NEWS_API_KEY_BASE_URL, NEWS_API_KEY, 'sources', {});
-export const fetchNewsFromGuardian = async (query, filters) => fetchData(GUARDIAN_NEWS_BASE_URL, GUARDIAN_NEWS_API_KEY, 'search', { q: query, ...filters });
+export const fetchNewsFromGuardian = async (query, filters) => {
+  const { page = 1, pageSize = 10, ...rest } = filters;
+  return fetchData(GUARDIAN_NEWS_BASE_URL, GUARDIAN_NEWS_API_KEY, 'search', { q: query, page, pageSize, ...rest });
+};

@@ -1,42 +1,39 @@
-import { useDispatch, useSelector } from "react-redux";
-import { getNews } from "../features/newsSlice"; // For Everything API
-import { getTopHeadlines } from "../features/topHeadlinesSlice"; // For Top Headlines API
-import { searchGuardianNews } from "../features/guardianSearchSlice"; // For Guardian API
-import { useEffect } from "react";
+// hooks/useMultiSourceNews.js
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { searchGuardianNews } from '../features/guardianSearchSlice'; // For Guardian API
+import { getNews } from '../features/newsSlice'; // For Everything API
+import { getTopHeadlines } from '../features/topHeadlinesSlice'; // For Top Headlines API
 
-const useMultiSourceNews = (
-  query,
-  isSearch = false,
-  apiSource = "everything"
-) => {
+const useMultiSourceNews = (query, page, apiSource = 'everything') => {
   const dispatch = useDispatch();
 
   const selectArticlesState = (state) => {
     switch (apiSource) {
-      case "everything":
+      case 'everything':
         return state.news;
-      case "topHeadlines":
+      case 'topHeadlines':
         return state.topHeadlines;
-      case "guardian":
+      case 'guardian':
         return state.guardianSearch;
       default:
         return state.news;
     }
   };
 
-  const { news, status, error, filters } = useSelector(selectArticlesState);
+  const { news, status, error, totalPages, totalResults } = useSelector(selectArticlesState);
 
   useEffect(() => {
-    if (apiSource === "guardian") {
-      dispatch(searchGuardianNews(query));
-    } else if (apiSource === "topHeadlines") {
-      dispatch(getTopHeadlines({ query }));
+    if (apiSource === 'guardian') {
+      dispatch(searchGuardianNews({ query, page }));
+    } else if (apiSource === 'topHeadlines') {
+      dispatch(getTopHeadlines({ query, page }));
     } else {
-      dispatch(getNews({ query, filters }));
+      dispatch(getNews({ query, page }));
     }
-  }, [dispatch, query, apiSource]);
+  }, [dispatch, query, apiSource, page]);
 
-  return { news, status, error };
+  return { news, status, error, page, totalPages, totalResults };
 };
 
 export default useMultiSourceNews;

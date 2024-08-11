@@ -2,13 +2,16 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchNewsFromGuardian } from "../api/newsServiceImpl";
 import { handleApiError } from "../utils/errorHandler";
 
-// Thunk for fetching articles from Guardian API
+// Thunk for fetching articles from Guardian API with pagination
 export const searchGuardianNews = createAsyncThunk(
   "guardianSearch/searchGuardianNews",
-  async (query, { rejectWithValue }) => {
+  async ({ query, page = 1, pageSize = 10 }, { rejectWithValue }) => {
     try {
-      const data = await fetchNewsFromGuardian(query);
-      return data.response.results;
+      const data = await fetchNewsFromGuardian(query, { page, pageSize });
+      return {
+        results: data.response.results,
+        totalPages: data.response.pages // Ensure this matches the API response
+      };
     } catch (error) {
       return rejectWithValue(handleApiError(error));
     }
@@ -21,6 +24,16 @@ const guardianSearchSlice = createSlice({
     news: [],
     status: "idle",
     error: null,
+    page: 1,
+    totalPages: 1,
+  },
+  reducers: {
+    setPage(state, action) {
+      state.page = action.payload;
+    },
+    setTotalPages(state, action) {
+      state.totalPages = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -29,7 +42,8 @@ const guardianSearchSlice = createSlice({
       })
       .addCase(searchGuardianNews.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.news = action.payload;
+        state.news = action.payload.results;
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(searchGuardianNews.rejected, (state, action) => {
         state.status = "failed";
@@ -38,4 +52,8 @@ const guardianSearchSlice = createSlice({
   },
 });
 
+export const { setPage, setTotalPages } = guardianSearchSlice.actions;
 export default guardianSearchSlice.reducer;
+
+
+
