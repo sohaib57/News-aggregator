@@ -1,30 +1,21 @@
-import React from "react";
-import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Box,
-  Typography,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
-import { CATEGORIES } from "../constants/constants";
-import { useDispatch, useSelector } from "react-redux";
-import { setFilters, getTopHeadlines } from "../features/topHeadlinesSlice";
-import { useNavigate } from "react-router-dom";
-import SearchForm from "./SearchForm";
+import React from 'react';
+import { Drawer, List, ListItem, ListItemText, Box, useTheme, useMediaQuery } from '@mui/material';
+import { CATEGORIES } from '../constants/constants';
+import { useDispatch } from 'react-redux';
+import { setFilters } from '../features/articlesSlice';
+import { useNavigate } from 'react-router-dom';
+import SearchForm from './SearchForm';
 
 const MobileDrawer = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = React.useState('');
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Responsive check
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleCategoryClick = (categoryId) => {
-    navigate(`/${categoryId}`); // Navigate to the category page
-    onClose(); // Close the drawer after selection
+    navigate(`/${categoryId}`);
+    onClose();
   };
 
   const handleSearchChange = (e) => {
@@ -35,10 +26,7 @@ const MobileDrawer = ({ open, onClose }) => {
     e.preventDefault();
     dispatch(
       setFilters({
-        query: searchQuery,
-        dateRange: {},
-        source: "",
-        category: "",
+        query: searchQuery
       })
     );
     navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
@@ -50,29 +38,11 @@ const MobileDrawer = ({ open, onClose }) => {
       anchor="left"
       open={open}
       onClose={onClose}
-      sx={{ width: isMobile ? "100%" : 250, height: "100%" }} // Ensure full height and adjust width
+      sx={{ width: isMobile ? '100%' : 250, height: '100%' }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-        }}
-      >
-        {/* Header */}
-        <Box
-          sx={{
-            padding: theme.spacing(2),
-            borderBottom: `1px solid ${theme.palette.divider}`,
-          }}
-        >
-          {/* Search Form */}
-          <Box
-            sx={{
-              padding: theme.spacing(2),
-              flexGrow: 0,
-            }}
-          >
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Box sx={{ padding: theme.spacing(2), borderBottom: `1px solid ${theme.palette.divider}` }}>
+          <Box sx={{ padding: theme.spacing(2), flexGrow: 0 }}>
             <SearchForm
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
@@ -81,22 +51,10 @@ const MobileDrawer = ({ open, onClose }) => {
             />
           </Box>
         </Box>
-
-        {/* Categories List */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            overflowY: "auto",
-            padding: theme.spacing(2),
-          }}
-        >
+        <Box sx={{ flexGrow: 1, overflowY: 'auto', padding: theme.spacing(2) }}>
           <List>
             {CATEGORIES.map((cat) => (
-              <ListItem
-                button
-                key={cat.id}
-                onClick={() => handleCategoryClick(cat.id)}
-              >
+              <ListItem button key={cat.id} onClick={() => handleCategoryClick(cat.id)}>
                 <ListItemText primary={cat.name} />
               </ListItem>
             ))}

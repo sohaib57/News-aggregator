@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, CardMedia, Link } from "@mui/material";
 import { PLACEHOLDER_IMAGE_URL } from "../constants/constants";
 
 const ArticleCard = ({ article }) => {
-  const imageSrc = article.urlToImage || PLACEHOLDER_IMAGE_URL;
+  const imageSrc = article.image || PLACEHOLDER_IMAGE_URL;
 
   return (
     <Card
@@ -44,15 +44,6 @@ const ArticleCard = ({ article }) => {
         >
           {article.description || "No description available"}
         </Typography>
-        {article.author && (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            style={{ marginBottom: "10px" }}
-          >
-            <strong>Author:</strong> {article.author}
-          </Typography>
-        )}
         {article.source && (
           <Typography
             variant="body2"

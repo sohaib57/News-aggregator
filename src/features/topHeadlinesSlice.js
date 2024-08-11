@@ -1,3 +1,4 @@
+// features/topHeadlinesSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchTopHeadlines } from '../api/newsApiClient';
 
@@ -40,7 +41,7 @@ const topHeadlinesSlice = createSlice({
     },
     clearArticles(state) {
       state.articles = [];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -49,12 +50,12 @@ const topHeadlinesSlice = createSlice({
       })
       .addCase(getTopHeadlines.fulfilled, (state, action) => {
         if (action.payload.page === 1) {
-          state.articles = action.payload.articles; // Replace articles if it's the first page
+          state.articles = action.payload.articles;
         } else {
-          state.articles = [...state.articles, ...action.payload.articles]; // Append articles for subsequent pages
+          state.articles = [...state.articles, ...action.payload.articles];
         }
-        state.filters.category = action.payload.category; // Update the category in the filters
-        state.filters.page = action.payload.page; // Update the current page
+        state.filters.category = action.payload.category;
+        state.filters.page = action.payload.page;
         state.paginationStatus = 'idle';
       })
       .addCase(getTopHeadlines.rejected, (state, action) => {

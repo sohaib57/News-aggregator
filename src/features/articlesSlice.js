@@ -1,13 +1,14 @@
+// features/articlesSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchArticles } from '../api/newsApiClient';
 
-// Thunk for fetching articles
+// Thunk for fetching articles from Everything API
 export const getArticles = createAsyncThunk(
   'articles/getArticles',
   async ({ query, filters }, { rejectWithValue }) => {
     try {
       const data = await fetchArticles(query, filters);
-      return data.articles;
+      return data.articles; // Ensure this matches the API response
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -41,7 +42,7 @@ const articlesSlice = createSlice({
     },
     clearArticles(state) {
       state.articles = [];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -50,7 +51,7 @@ const articlesSlice = createSlice({
       })
       .addCase(getArticles.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.articles = action.payload; // Replace articles with new data
+        state.articles = action.payload; // State update
       })
       .addCase(getArticles.rejected, (state, action) => {
         state.status = 'failed';
