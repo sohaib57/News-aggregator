@@ -1,6 +1,6 @@
 import React from "react";
-import useArticles from "../hooks/useArticles";
-import ArticleList from "../components/ArticleList";
+import useMultiSourceNews from "../hooks/useMultiSourceNews ";
+import NewsList from "../components/NewsList";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useLocation } from "react-router-dom";
 import { Container, Typography, Box } from "@mui/material";
@@ -11,7 +11,12 @@ const SearchPage = () => {
   const searchQuery = queryParams.get("query") || "";
 
   // Using Guardian API for search results
-  const { articles, status, error } = useArticles(searchQuery, true, "guardian");
+  const { news, status, error } = useMultiSourceNews(
+    searchQuery,
+    true,
+    "guardian"
+  );
+  console.log("news", news);
 
   return (
     <Container>
@@ -21,7 +26,7 @@ const SearchPage = () => {
         </Typography>
       </Box>
       <LoadingIndicator status={status} error={error} />
-      {status === "succeeded" && <ArticleList articles={articles} />}
+      {status === "succeeded" && <NewsList news={news} />}
     </Container>
   );
 };

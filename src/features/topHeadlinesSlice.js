@@ -1,4 +1,3 @@
-// features/topHeadlinesSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchTopHeadlines } from '../api/newsApiClient';
 
@@ -18,7 +17,7 @@ export const getTopHeadlines = createAsyncThunk(
 const topHeadlinesSlice = createSlice({
   name: 'topHeadlines',
   initialState: {
-    articles: [],
+    news: [],  // Updated to 'news'
     filters: {
       query: '',
       category: '',
@@ -39,8 +38,8 @@ const topHeadlinesSlice = createSlice({
     setQuery(state, action) {
       state.filters.query = action.payload;
     },
-    clearArticles(state) {
-      state.articles = [];
+    clearNews(state) { // Updated to 'clearNews'
+      state.news = [];
     },
   },
   extraReducers: (builder) => {
@@ -50,9 +49,9 @@ const topHeadlinesSlice = createSlice({
       })
       .addCase(getTopHeadlines.fulfilled, (state, action) => {
         if (action.payload.page === 1) {
-          state.articles = action.payload.articles;
+          state.news = action.payload.articles; // Updated to 'news'
         } else {
-          state.articles = [...state.articles, ...action.payload.articles];
+          state.news = [...state.news, ...action.payload.articles]; // Updated to 'news'
         }
         state.filters.category = action.payload.category;
         state.filters.page = action.payload.page;
@@ -65,6 +64,6 @@ const topHeadlinesSlice = createSlice({
   },
 });
 
-export const { setFilters, setPage, setQuery, clearArticles } = topHeadlinesSlice.actions;
+export const { setFilters, setPage, setQuery, clearNews } = topHeadlinesSlice.actions;
 
 export default topHeadlinesSlice.reducer;

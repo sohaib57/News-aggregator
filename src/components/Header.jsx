@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setFilters } from '../features/articlesSlice';
+import { setFilters } from '../features/newsSlice'; // Update to newsSlice
 import { AppBar, Toolbar, Typography, IconButton, useTheme, useMediaQuery, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchForm from './SearchForm';

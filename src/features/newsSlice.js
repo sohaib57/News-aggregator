@@ -1,13 +1,12 @@
-// features/articlesSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchArticles } from '../api/newsApiClient';
+import { fetchNews } from '../api/newsApiClient';
 
-// Thunk for fetching articles from Everything API
-export const getArticles = createAsyncThunk(
-  'articles/getArticles',
+// Thunk for fetching news
+export const getNews = createAsyncThunk(
+  'news/getNews',
   async ({ query, filters }, { rejectWithValue }) => {
     try {
-      const data = await fetchArticles(query, filters);
+      const data = await fetchNews(query, filters);
       return data.articles; // Ensure this matches the API response
     } catch (error) {
       return rejectWithValue(error.message);
@@ -15,10 +14,10 @@ export const getArticles = createAsyncThunk(
   }
 );
 
-const articlesSlice = createSlice({
-  name: 'articles',
+const newsSlice = createSlice({
+  name: 'news',
   initialState: {
-    articles: [],
+    news: [],
     filters: {
       query: '',
       dateRange: { startDate: '', endDate: '' },
@@ -40,26 +39,26 @@ const articlesSlice = createSlice({
     setQuery(state, action) {
       state.filters.query = action.payload;
     },
-    clearArticles(state) {
-      state.articles = [];
+    clearNews(state) {
+      state.news = [];
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getArticles.pending, (state) => {
+      .addCase(getNews.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(getArticles.fulfilled, (state, action) => {
+      .addCase(getNews.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.articles = action.payload; // State update
+        state.news = action.payload; // State update
       })
-      .addCase(getArticles.rejected, (state, action) => {
+      .addCase(getNews.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       });
   },
 });
 
-export const { setFilters, setPage, setQuery, clearArticles } = articlesSlice.actions;
+export const { setFilters, setPage, setQuery, clearNews } = newsSlice.actions;
 
-export default articlesSlice.reducer;
+export default newsSlice.reducer;

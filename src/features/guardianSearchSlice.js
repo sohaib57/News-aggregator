@@ -1,38 +1,38 @@
-// features/guardianSearchSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchArticlesFromGuardian } from '../api/newsApiClient';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchNewsFromGuardian } from "../api/newsApiClient";
+import { handleApiError } from "../utils/errorHandler";
 
 // Thunk for fetching articles from Guardian API
-export const searchGuardianArticles = createAsyncThunk(
-  'guardianSearch/searchGuardianArticles',
+export const searchGuardianNews = createAsyncThunk(
+  "guardianSearch/searchGuardianNews",
   async (query, { rejectWithValue }) => {
     try {
-      const data = await fetchArticlesFromGuardian(query);
-      return data.response.results; // Adjust this based on actual response structure
+      const data = await fetchNewsFromGuardian(query);
+      return data.response.results; // Ensure this matches the API response structure
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(handleApiError(error));
     }
   }
 );
 
 const guardianSearchSlice = createSlice({
-  name: 'guardianSearch',
+  name: "guardianSearch",
   initialState: {
-    articles: [],
-    status: 'idle',
+    news: [],
+    status: "idle",
     error: null,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(searchGuardianArticles.pending, (state) => {
-        state.status = 'loading';
+      .addCase(searchGuardianNews.pending, (state) => {
+        state.status = "loading";
       })
-      .addCase(searchGuardianArticles.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.articles = action.payload;
+      .addCase(searchGuardianNews.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.news = action.payload; // Ensure this is the correct state key
       })
-      .addCase(searchGuardianArticles.rejected, (state, action) => {
-        state.status = 'failed';
+      .addCase(searchGuardianNews.rejected, (state, action) => {
+        state.status = "failed";
         state.error = action.payload;
       });
   },

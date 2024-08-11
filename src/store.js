@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import articlesReducer from "./features/articlesSlice";
+import newsReducer from "./features/newsSlice"; // Update to newsSlice
 import topHeadlinesReducer from "./features/topHeadlinesSlice";
-import guardianSearchReducer from "./features/guardianSearchSlice"; // Make sure to rename to match the default export
+import guardianSearchReducer from "./features/guardianSearchSlice"; 
 
 const store = configureStore({
   reducer: {
-    articles: articlesReducer,
+    news: newsReducer, // Updated to news
     topHeadlines: topHeadlinesReducer,
     guardianSearch: guardianSearchReducer, // Add this if you use guardianSearchSlice
   },

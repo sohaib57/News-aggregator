@@ -2,7 +2,7 @@ import React from 'react';
 import { Drawer, List, ListItem, ListItemText, Box, useTheme, useMediaQuery } from '@mui/material';
 import { CATEGORIES } from '../constants/constants';
 import { useDispatch } from 'react-redux';
-import { setFilters } from '../features/articlesSlice';
+import { setFilters } from '../features/newsSlice'; // Update to newsSlice
 import { useNavigate } from 'react-router-dom';
 import SearchForm from './SearchForm';
 

@@ -27,8 +27,8 @@ const fetchData = async (baseUrl, apiKey, endpoint, params) => {
   }
 };
 
-// Fetch articles from Everything API
-export const fetchArticles = (query, filters) =>
+// Fetch news from Everything API
+export const fetchNews = (query, filters) =>
   fetchData(NEWS_API_KEY_BASE_URL, NEWS_API_KEY, "everything", {
     q: query,
     from: filters.dateRange?.startDate,
@@ -50,14 +50,14 @@ export const fetchTopHeadlines = (query, category, page = 1, pageSize = 50) =>
 
 // Fetch sources from Everything API
 export const fetchSources = () =>
-  fetchData(NEWS_API_KEY_BASE_URL, NEWS_API_KEY, "top-headlines/sources", {});
+  fetchData(NEWS_API_KEY_BASE_URL, NEWS_API_KEY, "sources", {});
 
-// Fetch articles from Guardian API
-export const fetchArticlesFromGuardian = (query) =>
+// Fetch news from Guardian API
+export const fetchNewsFromGuardian = (query, filters) =>
   fetchData(GUARDIAN_NEWS_BASE_URL, GUARDIAN_NEWS_API_KEY, "search", {
     q: query,
-    // fromDate: filters.dateRange?.startDate,
-    // toDate: filters.dateRange?.endDate,
-    // section: filters.category,
-    // pageSize: filters.pageSize,
+    // fromDate: filters?.dateRange?.startDate,
+    // toDate: filters?.dateRange?.endDate,
+    // section: filters?.category,
+    // pageSize: filters?.pageSize,
   });
