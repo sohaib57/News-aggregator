@@ -1,13 +1,19 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchNews } from '../api/newsServiceImpl';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchNews } from "../api/newsServiceImpl";
 
 // Thunk for fetching news
 export const getNews = createAsyncThunk(
-  'news/getNews',
+  "news/getNews",
   async ({ query, filters }, { rejectWithValue }) => {
     try {
       const data = await fetchNews(query, filters);
-      return data.articles; 
+      return {
+        articles: data.articles,
+        totalPages: data.totalResults
+          ? Math.ceil(data.totalResults / filters.pageSize)
+          : 1,
+        totalResults: data.totalResults || 0,
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -15,19 +21,21 @@ export const getNews = createAsyncThunk(
 );
 
 const newsSlice = createSlice({
-  name: 'news',
+  name: "news",
   initialState: {
     news: [],
     filters: {
-      query: '',
-      dateRange: { startDate: '', endDate: '' },
-      source: '',
-      category: '',
+      query: "",
+      dateRange: { startDate: "", endDate: "" },
+      source: "",
+      category: "",
       page: 1,
       pageSize: 10,
     },
-    status: 'idle',
+    status: "idle",
     error: null,
+    totalPages: 1,
+    totalResults: 0,
   },
   reducers: {
     setFilters(state, action) {
@@ -46,14 +54,16 @@ const newsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getNews.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(getNews.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.news = action.payload; // State update
+        state.status = "succeeded";
+        state.news = action.payload.articles; // Update with articles
+        state.totalPages = action.payload.totalPages; // Set total pages
+        state.totalResults = action.payload.totalResults; // Set total results
       })
       .addCase(getNews.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.payload;
       });
   },

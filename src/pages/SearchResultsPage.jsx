@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NewsList from '../components/NewsList';
 import LoadingIndicator from '../components/LoadingIndicator';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Typography, Box, Button, Stack } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
-import useMultiSourceNews from '../hooks/useMultiSourceNews'; // Import the custom hook
+import { fetchNewsFromGuardian } from '../api/newsServiceImpl'; // Import the fetch function
 
 const SearchResultsPage = () => {
   const location = useLocation();
@@ -12,9 +12,32 @@ const SearchResultsPage = () => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get('query') || '';
-  const currentPage = parseInt(queryParams.get('page')) || 1;
+  const currentPage = parseInt(queryParams.get('page'), 10) || 1;
 
-  const { news, status, error, page, totalPages, totalResults } = useMultiSourceNews(searchQuery, currentPage, 'guardian');
+  // State for news data, loading, and error
+  const [news, setNews] = useState([]);
+  const [status, setStatus] = useState('idle');
+  const [error, setError] = useState(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalResults, setTotalResults] = useState(0);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      setStatus('loading');
+      try {
+        const data = await fetchNewsFromGuardian(searchQuery, { page: currentPage });
+        setNews(data.response.results);
+        setTotalPages(Math.ceil(data.response.total / 10)); // Assuming pageSize is 10
+        setTotalResults(data.response.total);
+        setStatus('succeeded');
+      } catch (error) {
+        setError(error.message);
+        setStatus('failed');
+      }
+    };
+
+    fetchNews();
+  }, [searchQuery, currentPage]);
 
   const handlePageChange = (newPage) => {
     navigate(`?query=${searchQuery}&page=${newPage}`);
@@ -25,8 +48,8 @@ const SearchResultsPage = () => {
     const buttons = [];
     const halfMax = Math.floor(maxButtons / 2);
 
-    let startPage = Math.max(page - halfMax, 1);
-    let endPage = Math.min(page + halfMax, totalPages);
+    let startPage = Math.max(currentPage - halfMax, 1);
+    let endPage = Math.min(currentPage + halfMax, totalPages);
 
     // Adjust start and end page if not enough buttons on one side
     if (endPage - startPage + 1 < maxButtons) {
@@ -84,7 +107,7 @@ const SearchResultsPage = () => {
         <>
           <Box sx={{ textAlign: 'center', marginBottom: 2 }}>
             <Typography variant="body1">
-              Showing page {page} of {totalPages} ({totalResults} results)
+              Showing page {currentPage} of {totalPages} ({totalResults} results)
             </Typography>
           </Box>
           <NewsList news={news} />
@@ -98,16 +121,16 @@ const SearchResultsPage = () => {
               <>
                 <Button
                   variant="outlined"
-                  disabled={page <= 1}
-                  onClick={() => handlePageChange(page - 1)}
+                  disabled={currentPage <= 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
                 >
                   Previous
                 </Button>
                 {renderPagination()}
                 <Button
                   variant="outlined"
-                  disabled={page >= totalPages}
-                  onClick={() => handlePageChange(page + 1)}
+                  disabled={currentPage >= totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
                 >
                   Next
                 </Button>
@@ -117,18 +140,18 @@ const SearchResultsPage = () => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Button
                   variant="outlined"
-                  disabled={page <= 1}
-                  onClick={() => handlePageChange(page - 1)}
+                  disabled={currentPage <= 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
                 >
                   Previous
                 </Button>
                 <Typography variant="body2" sx={{ mx: 2 }}>
-                  Page {page} of {totalPages}
+                  Page {currentPage} of {totalPages}
                 </Typography>
                 <Button
                   variant="outlined"
-                  disabled={page >= totalPages}
-                  onClick={() => handlePageChange(page + 1)}
+                  disabled={currentPage >= totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
                 >
                   Next
                 </Button>
@@ -136,6 +159,11 @@ const SearchResultsPage = () => {
             )}
           </Stack>
         </>
+      )}
+      {status === 'failed' && (
+        <Typography variant="h6" color="error">
+          Oops! Something went wrong. {error}
+        </Typography>
       )}
     </Container>
   );
